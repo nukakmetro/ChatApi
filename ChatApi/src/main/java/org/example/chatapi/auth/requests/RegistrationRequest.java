@@ -6,9 +6,11 @@ import lombok.Data;
 @Data
 @Builder
 public class RegistrationRequest {
-    private String email;
     private String username;
-    private String name;
-    private String lastname;
     private String password;
+
+    public boolean isValid() {
+        // TODO: implement validation
+        return true;
+    }
 }

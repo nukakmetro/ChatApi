@@ -1,4 +1,4 @@
-package com.amr.chatservice.configuration;
+package com.amr.chatservice.configuration; // поменяй название пакета)
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +23,8 @@ public class SecurityConfig {
         config.addAllowedMethod("POST");
         config.addAllowedMethod("DELETE");
         config.addAllowedMethod("PATCH");
+        //
+
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }

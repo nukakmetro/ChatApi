@@ -10,4 +10,8 @@ public class AuthorizationRequest {
     private String username;
     private String password;
 
+    public boolean isValid() {
+        // TODO: implement validation
+        return true;
+    }
 }
