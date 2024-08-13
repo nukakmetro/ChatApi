@@ -5,17 +5,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.chatapi.auth.requests.AuthorizationRequest;
 import org.example.chatapi.auth.requests.RegistrationRequest;
 import org.example.chatapi.auth.responses.AuthorizationResponse;
-import org.example.chatapi.auth.responses.RegistrationResponse;
 import org.example.chatapi.exceptions.InvalidCredentialsException;
 import org.example.chatapi.exceptions.InvalidRequestException;
 import org.example.chatapi.exceptions.UsernameIsExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/chatApi/v1/auth")
@@ -26,9 +26,9 @@ public class AuthController {
     private final AuthService service;
 
     @PostMapping("/registration")
-    public ResponseEntity<RegistrationResponse> registration(@RequestBody RegistrationRequest request) {
+    public ResponseEntity<AuthorizationResponse> registration(@RequestBody RegistrationRequest request) {
 
-        RegistrationResponse response = RegistrationResponse.builder().build();
+        AuthorizationResponse response = AuthorizationResponse.builder().build();
         HttpStatus status;
         String message;
 
@@ -46,8 +46,8 @@ public class AuthController {
 
         response.setMessage(message);
 
-        log.info("REGISTRATION - email: {}, status: {}, message: {}",
-                request.getEmail(), status, message);
+        log.info("REGISTRATION - username: {}, status: {}, message: {}",
+                request.getUsername(), status, message);
 
         return ResponseEntity
                 .status(status)
@@ -65,7 +65,7 @@ public class AuthController {
             response = service.authorization(request);
             status = HttpStatus.CREATED;
             message = status.getReasonPhrase();
-        } catch (UsernameNotFoundException | InvalidRequestException |
+        } catch (NoSuchElementException | InvalidRequestException |
                  InvalidCredentialsException e) {
             status = HttpStatus.BAD_REQUEST;
             message = e.getMessage();
